@@ -2,17 +2,16 @@ import React from "react";
 import classNames from "classnames";
 
 function starRating(rating) {
-  let result = "";
+  let result = [];
   for (let i = 0; i < Math.floor(rating / 2); i++) {
-    result =
-      result + "<div className='card__star card__star_type_active'></div> ";
+    result.push(<div className="card__star card__star_type_active"></div>);
   }
   if (rating % 2 !== 0) {
-    result =
-      result + "<div className='card__star card__star_type_half'></div> ";
+    result.push(<div className="card__star card__star_type_half"></div>);
+      
   }
   for (let i = 0; i < Math.floor((10 - rating) / 2); i++) {
-    result = result + "<div className='card__star'></div> ";
+    result.push(<div className="card__star"></div> );
   }
   return result;
 }
@@ -27,6 +26,15 @@ function Card(props) {
     card__badge_type_strategy: props.strategy,
   });
 
+  const badgeText = classNames({
+    Action: props.action,
+    "Action RPG": props.actionRpg,
+    "Card Game": props.cardGame,
+    "Multiplayer RPG": props.mmorpg,
+    "Shooter": props.shooter,
+    "Strategy": props.strategy,
+  })
+
   const oldPriceClasses = classNames("card__old-price", {
     "card__old-price_active": props.oldPrice,
   });
@@ -35,14 +43,14 @@ function Card(props) {
     card__sale_active: props.oldPrice
   });
 
-  const sale = "-" + Math.round(parseInt(props.newPrice) / parseInt(props.oldPrice) * 100) + "%";
+  const sale = props.oldPrice ? "-" + Math.round(parseInt(props.newPrice.replace(",","")) / parseInt(props.oldPrice.replace(",","")) * 100) + "%" : "";
 
   return (
     <article className="card">
       <a className="card__link" href="#">
         <button className="card__close"></button>
-        <img className="card__image" url={props.url} />
-        <p className={badgeClasses}></p>
+        <img className="card__image" url={props.image} alt={props.children} />
+        <p className={badgeClasses}>{badgeText}</p>
         <h2 className="card__title">{props.children}</h2>
         <div className="card__stars">
           {starRating(props.rating)}
